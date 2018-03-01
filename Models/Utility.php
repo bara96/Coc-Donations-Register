@@ -27,7 +27,7 @@ class Utility
             curl_setopt($curl, CURLOPT_URL, $URL);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array(
                 'Accept: application/json',
-                'authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjdiYjJlNDMyLTg0ZTUtNDRlZi1hZmZhLTY4MzFkYjBkMjNkYyIsImlhdCI6MTUxODc4MjM0NSwic3ViIjoiZGV2ZWxvcGVyLzk3ZjFhMjMzLTk0YjQtYzI4Ni1lMTlkLTMzMWYzNTE0ZDk5MSIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjE1My45Mi4wLjIyIl0sInR5cGUiOiJjbGllbnQifV19.XOkFVYinq2arXHCpv_p_L7IgCtUa2esUodkQVpZsVfZSvn3M3AEvXufZ7vwGOTo0L_Uqc068KqkP29MuxH26BQ'
+                'authorization: Bearer insert_your_token_here'
             )); // Clash of Clans API Token
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
             $json = curl_exec($curl);
@@ -57,6 +57,39 @@ class Utility
             return $api->{"$string"};
         else
             return 0;
+    }
+
+    /**
+     * return a inactive result of a player, it's based on the follow params.
+     * this is my peronal view of an inactive member, with this script a player result inactive under 2.6 result points
+     * i have set to $attacks and $donations_made an higher weight, due to personal needs.
+     * @param int $attacks
+     * @param int $donations_made
+     * @param int $donations_received
+     * @param bool $shield
+     * @param int $xp
+     * @param int $war_stars
+     * @param int $trophies
+     * @param int $role
+     * @return float|int
+     */
+    public static function check_inactive($attacks, $donations_made, $donations_received, $shield, $xp, $war_stars, $trophies, $role){
+        $result  = 5*log10($donations_made+1);
+        $result += 3*log10($donations_received+1);
+        $result += 250*log10($attacks+1);
+        $result += 2*log10($war_stars+1);
+        $result += log10($trophies+1);
+        $result += log10($xp+1);
+        if($shield)
+            $result = $result * 2;
+        switch ($role){
+            case 4: $role=30;break;
+            case 3: $role=30;break;
+            case 2: $role=10;break;
+            default:$role=1;break;
+        }
+        $result = round(log10($result*$role),10);
+        return $result;
     }
 
     /**

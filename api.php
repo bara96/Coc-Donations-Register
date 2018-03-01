@@ -4,6 +4,9 @@
  * User: matteo
  * Date: 30/01/2018
  * Time: 19:34
+ *
+ * this file is used to send request to Clash API and print the json response, if you need to made a call without a token from some other application.
+ * https://apicoc.000webhostapp.com/api.php can be used to do that.
  */
 require_once("Models/Utility.php");
 $api = null;

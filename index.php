@@ -6,6 +6,7 @@
  * Time: 12:49
  *
  * index of the register, only a test script
+ * you can find an example at: https://apicoc.000webhostapp.com/
  */
 require_once ("Models/DAO.php");
 include_once ("cron.php");
