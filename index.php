@@ -9,6 +9,7 @@
  * you can find an example at: https://apicoc.000webhostapp.com/
  */
 require_once ("Models/DAO.php");
+require_once ("Models/Utility.php");
 include_once ("cron.php");
 $clansRecorded = DAO::getClansRecord();
 
@@ -24,6 +25,11 @@ if(isset($_REQUEST["error"]))
         case  1:
             echo '<script language="javascript"> alert("Error. Check if tag is correct")</script>';break;
     }
+
+if(isset($_COOKIE["time_offset"]))
+    $timeOffset = $_COOKIE["time_offset"];
+else
+    $timeOffset=0;
 ?>
 <html>
 <body>
@@ -56,6 +62,16 @@ if(isset($_REQUEST["error"]))
 <p><i>The register will update approximately every 10/15 minutes. For more informations please refer to <a href="mailto:iranpalangofficial@gmail.com">iranpalangofficial@gmail.com</a></i></p>
 
 <?php
+$currentTimeZone = timezone_name_from_abbr("", $timeOffset, false);
+
+if(!$currentTimeZone) {
+    echo "<p>Error detecting timezone (Enable Cookies), default timezone: 'Europe/Rome' </p>";
+    $currentTimeZone = 'Europe/Rome';
+}
+else {
+    echo "<p>Current TimeZone set: $currentTimeZone </p>";
+}
+echo' <button onclick="set_timezone()" type="submit">Detect your Timezone</button>';
 
 try {
     echo '<h2 style="color: red;">Clan: ' . $clan->getName() . ' (' . $clan->getTagClan() . ') </h2>';
@@ -65,7 +81,8 @@ try {
     <table style="text-align: center;">
     <tr><td><b>Player</b></td><td><b>Tag</b></td><td><b>Donations</b></td><td><b>Date</b></td></tr>';
     foreach ($logs as $log) {
-        echo '<tr><td>' . $log->getName() . '</td><td>' . $log->getTag() . '</td><td>' . $log->getDonations() . '</td><td>' . $log->getDate() . '</td></tr>';
+        $date = Utility::converToTz($log->getDate(), $currentTimeZone,'Europe/Rome');
+        echo '<tr><td>' . $log->getName() . '</td><td>' . $log->getTag() . '</td><td>' . $log->getDonations() . '</td><td>' . $date . '</td></tr>';
     }
     echo '</table><br>';
 
@@ -75,7 +92,8 @@ try {
     <table style="text-align: center;">
         <tr><td><b>Player</b></td><td><b>Tag</b></td><td><b>Donations</b></td><td><b>Date</b></td></tr>';
     foreach ($ricevute as $log) {
-        echo '<tr><td>' . $log->getName() . '</td><td>' . $log->getTag() . '</td><td>' . $log->getDonations() . '</td><td>' . $log->getDate() . '</td></tr>';
+        $date = Utility::converToTz($log->getDate(), $currentTimeZone,'Europe/Rome');
+        echo '<tr><td>' . $log->getName() . '</td><td>' . $log->getTag() . '</td><td>' . $log->getDonations() . '</td><td>' . $date . '</td></tr>';
     }
     echo '</table><br>';
 }
@@ -86,4 +104,15 @@ catch (Exception $e){
 
 </body>
 </html>
+
+<script>
+
+    function set_timezone() {
+        var d = new Date();
+        var dtz = -(d.getTimezoneOffset())*60;
+        document.cookie="time_offset="+dtz;
+
+        location.reload();
+    }
+</script>
 

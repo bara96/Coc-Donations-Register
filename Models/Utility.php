@@ -139,4 +139,17 @@ class Utility
 
     }
 
+    /**
+     * @param string $time
+     * @param string $toTz
+     * @param string $fromTz
+     * @return string
+     */
+    public static function converToTz($time="", $toTz='', $fromTz='')
+    {
+        $date = new DateTime($time, new DateTimeZone($fromTz));
+        $date->setTimezone(new DateTimeZone($toTz));
+        $time= $date->format('Y/m/d H:i:s');
+        return $time;
+    }
 }
