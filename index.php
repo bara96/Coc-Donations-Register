@@ -30,10 +30,12 @@ if(isset($_COOKIE["time_offset"]))
     $timeOffset = $_COOKIE["time_offset"];
 else
     $timeOffset=0;
+
+include_once ("Commons/Header.html");
 ?>
 <html>
 <body>
-<h1>Donations Register (Beta)</h1>
+<h2>Donations Register</h2>
 <form method="post" action="index.php">
     <label for="selectClan">Select a Clan</label>
     <select name="clan" id="selectClan">
@@ -74,10 +76,10 @@ else {
 echo' <button onclick="set_timezone()" type="submit">Detect your Timezone</button>';
 
 try {
-    echo '<h2 style="color: red;">Clan: ' . $clan->getName() . ' (' . $clan->getTagClan() . ') </h2>';
+    echo '<h3 style="color: red;">Clan: ' . $clan->getName() . ' (' . $clan->getTagClan() . ') </h3>';
     $logs = DAO::getLogsDonated($clan->getTagClan());
     echo '
-    <h3 class="centered">Donated</h3>
+    <h3>Donated</h3>
     <table style="text-align: center;">
     <tr><td><b>Player</b></td><td><b>Tag</b></td><td><b>Donations</b></td><td><b>Date</b></td></tr>';
     foreach ($logs as $log) {
@@ -88,7 +90,7 @@ try {
 
     $ricevute = DAO::getLogsReceived($clan->getTagClan());
     echo '
-    <h3 class="centered">Received</h3>
+    <h3>Received</h3>
     <table style="text-align: center;">
         <tr><td><b>Player</b></td><td><b>Tag</b></td><td><b>Donations</b></td><td><b>Date</b></td></tr>';
     foreach ($ricevute as $log) {
@@ -115,4 +117,3 @@ catch (Exception $e){
         location.reload();
     }
 </script>
-

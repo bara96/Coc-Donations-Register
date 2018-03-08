@@ -1,0 +1,8 @@
+#nav li {
+    display: inline;
+    -webkit-margin-start: 1em;
+}
+
+#nav h3 {
+    display: inline;
+}
