@@ -8,4 +8,4 @@ An advanced (and custom) implementation can be found [here](https://iranpalang.0
 My implementation of this can be found [here](https://apicoc.000webhostapp.com/), where you can add your tag clan to the register, and the application will store your clan data.<br>
 
 <strong>Note:</strong> 1) It will take few hours to start recording, and please note that the first time you add a clan(or o new member join), it will show the actual data stored on API(and not on db), then don't be scared if you see strange numbers, it's normal.<br>
-2) Some functions are implementated but not used yet.
+2) Some functions are implementated but not used yet. 3) The Host is free, this mean that could be slow (or sometimes unavailable).
